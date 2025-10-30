@@ -15,17 +15,14 @@ class ProjectCsl(models.Model):
         'res.partner',
         string='Project Co-ordinator',
         tracking=True,
-        # domain=[('customer_rank', '>', 0)] # Domain removed as requested
     )
 
     customer_id = fields.Many2one(
         'res.partner',
         string='Customer',
-        # domain=[('customer_rank', '>', 0)], # Domain removed as requested
         tracking=True,
         required=True
     )
-
 
     date_start = fields.Date(string='Start Date', default=fields.Date.context_today, tracking=True)
     date_end = fields.Date(string='End Date', tracking=True)
@@ -65,7 +62,6 @@ class ProjectCsl(models.Model):
     )
     purchase_order_count = fields.Integer(string='Purchase Order Count', compute='_compute_purchase_order_count')
 
-
     # Page 5: Purchase (Vendor Bills)
     project_bill_ids = fields.One2many(
         'account.move',
@@ -74,7 +70,6 @@ class ProjectCsl(models.Model):
         domain=[('move_type', '=', 'in_invoice')]
     )
     project_bill_count = fields.Integer(string='Vendor Bill Count', compute='_compute_project_bill_count')
-
 
     # Page 6: Employee
     employee_ids = fields.Many2many(
@@ -96,12 +91,10 @@ class ProjectCsl(models.Model):
         compute='_compute_employee_requisition_count'
     )
     
-    # Other Notebook fields (moved to end)
+    # Other Notebook fields
     estimated_cost_details = fields.Text(string='Estimated Cost Details')
     budget_details = fields.Text(string='Budget Details')
     task_duties_details = fields.Text(string='Task & Duties Details')
-    # This text field is now replaced by the One2many table
-    # purchase_request_details = fields.Text(string='Purchase Request Details') 
     cost_details = fields.Text(string='Cost Details')
     
     # --- Compute & Onchange ---
@@ -135,7 +128,7 @@ class ProjectCsl(models.Model):
     def _onchange_scope_work_set_id(self):
         """Populate project scope lines from the selected set."""
         if not self.scope_work_set_id:
-            self.project_scope_line_ids = [(5, 0, 0)] # Remove all existing lines
+            self.project_scope_line_ids = [(5, 0, 0)]
             return
 
         lines_to_create = []
@@ -145,11 +138,9 @@ class ProjectCsl(models.Model):
                 'sequence': line.sequence,
             }))
         
-        # Replace existing lines with new ones
         self.project_scope_line_ids = [(5, 0, 0)] 
         self.project_scope_line_ids = lines_to_create
 
-    
     # --- Sequence ---
     
     @api.model
@@ -160,7 +151,6 @@ class ProjectCsl(models.Model):
             vals['project_reference'] = seq.next_by_id() or '/'
 
         project = super(ProjectCsl, self).create(vals)
-        # Note: Linking quotations is now handled by 'project.quotation.line' model
         return project
 
     def _get_or_create_company_sequence(self, company_id):
@@ -178,10 +168,8 @@ class ProjectCsl(models.Model):
             ], limit=1)
 
             if base_seq:
-                # Copy base sequence for this company
                 company_seq = base_seq.copy({'company_id': company_id})
             else:
-                # Create new if not found at all
                 company_seq = IrSequence.create({
                     'name': f'Project Reference ({company_id})',
                     'code': 'project.csl.reference',
@@ -194,7 +182,6 @@ class ProjectCsl(models.Model):
         return company_seq
 
     def write(self, vals):
-        """Note: Linking quotations is now handled by 'project.quotation.line' model"""
         res = super().write(vals)
         return res
     
@@ -208,15 +195,12 @@ class ProjectCsl(models.Model):
             raise UserError("Please select at least one quotation to create invoices.")
 
         created_invoices = self.env['account.move']
-        
-        # Use quotations from the new lines
         quotations_to_invoice = self.project_quotation_line_ids.quotation_id
 
         for sale_order in quotations_to_invoice:
-            # Check if an invoice already exists for this SO via this project
             existing_invoice = self.invoice_ids.filtered(lambda inv: inv.invoice_origin == sale_order.name)
             if existing_invoice:
-                continue # Skip if already invoiced from this project
+                continue
 
             if sale_order.state != 'sale':
                 raise UserError(
@@ -227,21 +211,13 @@ class ProjectCsl(models.Model):
             if not sale_order.order_line:
                 raise UserError(f"The quotation '{sale_order.name}' has no products to invoice.")
 
-            # Use standard Odoo method to prepare invoice values
-            # This handles taxes, accounts, etc. correctly
-            invoice_vals = sale_order._prepare_invoice_values()
-
-            # Add project link
-            invoice_vals['project_csl_id'] = self.id # ✅ Link invoice to this project
+            invoice_vals = sale_order._prepare_invoice()
+            invoice_vals['project_csl_id'] = self.id
             
             invoice = self.env['account.move'].create(invoice_vals)
-
-            # Link invoice back to SO (standard Odoo behavior)
             sale_order.invoice_ids = [(4, invoice.id)]
-
             created_invoices |= invoice
 
-        # Return invoices action window
         action = self.env.ref('account.action_move_out_invoice_type').read()[0]
         action['domain'] = [('id', 'in', created_invoices.ids)]
         return action
@@ -315,7 +291,6 @@ class ProjectCsl(models.Model):
             rec.state = 'draft'
 
 
-
 class SaleOrder(models.Model):
     _inherit = 'sale.order'
 
@@ -325,6 +300,7 @@ class SaleOrder(models.Model):
         help="Linked Project",
         ondelete='set null',
         copy=False,
+        tracking=True
     )
 
     project_reference = fields.Char(
@@ -334,9 +310,9 @@ class SaleOrder(models.Model):
         readonly=True
     )
 
-    def _prepare_invoice_values(self):
+    def _prepare_invoice(self):
         """Pass the project ID to the invoice when created from the SO."""
-        invoice_vals = super()._prepare_invoice_values()
+        invoice_vals = super(SaleOrder, self)._prepare_invoice()
         if self.project_csl_id:
             invoice_vals['project_csl_id'] = self.project_csl_id.id
         return invoice_vals

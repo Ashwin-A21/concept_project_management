@@ -6,21 +6,25 @@
         <field name="inherit_id" ref="account.view_move_form"/>
         <field name="arch" type="xml">
             
+            <!-- Smart Button -->
             <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
                 <button type="object"
                     name="action_view_project"
                     class="oe_stat_button"
                     icon="fa-folder"
-                    invisible="[('project_csl_id', '=', False)]">
+                    invisible="project_csl_id == False">
                     <span class="o_stat_text">Project</span>
                 </button>
             </xpath>
 
-            <xpath expr="//page[@name='other_info']//field[@name='ref']" position="after">
-                <field name="project_csl_id" readonly="1"
-                       invisible="[('move_type', 'not in', ('out_invoice', 'in_invoice'))]"/>
-                <field name="project_reference" readonly="1"
-                       invisible="[('move_type', 'not in', ('out_invoice', 'in_invoice'))]"/>
+            <!-- Add fields in Other Info tab - More visible location -->
+            <xpath expr="//field[@name='invoice_user_id']" position="after">
+                <field name="project_csl_id" 
+                       readonly="1"
+                       invisible="move_type not in ('out_invoice', 'in_invoice', 'out_refund', 'in_refund')"/>
+                <field name="project_reference" 
+                       readonly="1"
+                       invisible="move_type not in ('out_invoice', 'in_invoice', 'out_refund', 'in_refund')"/>
             </xpath>
 
         </field>

@@ -19,7 +19,8 @@
         'sale_management',
         'account',
         'purchase',
-        'hr'
+        'hr',
+        'repair'
     ],
     'data': [
         'security/project_management_security.xml',

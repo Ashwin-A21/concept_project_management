@@ -5,18 +5,23 @@
         <field name="model">purchase.order</field>
         <field name="inherit_id" ref="purchase.purchase_order_form"/>
         <field name="arch" type="xml">
+            
+            <!-- Smart Button -->
             <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
                 <button type="object"
                     name="action_view_project"
                     class="oe_stat_button"
                     icon="fa-folder"
-                    invisible="[('project_csl_id', '=', False)]">
+                    invisible="project_csl_id == False">
                     <span class="o_stat_text">Project</span>
                 </button>
             </xpath>
 
+            <!-- Add fields after partner_ref -->
             <xpath expr="//field[@name='partner_ref']" position="after">
-                <field name="project_csl_id" context="{'default_customer_id': partner_id}"/>
+                <field name="project_csl_id" 
+                       options="{'no_create': True, 'no_open': True}"
+                       context="{'default_customer_id': partner_id}"/>
                 <field name="project_reference" readonly="1"/>
             </xpath>
         </field>

@@ -1,4 +1,4 @@
-<odoo>
+<odoo noupdate="1">
     <record id="seq_project_csl_reference" model="ir.sequence">
         <field name="name">Project Reference</field>
         <field name="code">project.csl.reference</field>

@@ -5,3 +5,4 @@ from . import account_move
 from . import purchase_order
 from . import project_csl
 from . import res_users
+from . import repair_order     # <-- ADD THIS
