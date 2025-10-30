@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <menuitem 
+            id="concept_project_management_root_menu"
+            name="Project Management"
+            sequence="10"/>
+
+        <menuitem
+            id="project_csl_menu"
+            name="Projects"
+            parent="concept_project_management_root_menu"
+            action="project_csl_action"
+            sequence="10"/>
+
+        <menuitem
+            id="project_csl_config_menu"
+            name="Configuration"
+            parent="concept_project_management_root_menu"
+            sequence="100"/>
+
+        <menuitem
+            id="scope_work_set_menu"
+            name="Scope of Work"
+            parent="project_csl_config_menu"
+            action="scope_work_set_action"
+            sequence="10"/>
+
+    </data>
+</odoo>

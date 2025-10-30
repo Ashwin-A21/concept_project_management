@@ -1,0 +1,26 @@
+<odoo>
+    <data>
+        <record id="view_order_form_inherit_project_csl" model="ir.ui.view">
+            <field name="name">sale.order.form.inherit.project.csl</field>
+            <field name="model">sale.order</field>
+            <field name="inherit_id" ref="sale.view_order_form"/>
+            <field name="arch" type="xml">
+                
+                <xpath expr="//div[hasclass('oe_button_box')]" position="inside">
+                    <button type="object"
+                        name="action_view_project"
+                        class="oe_stat_button"
+                        icon="fa-folder"
+                        invisible="[('project_csl_id', '=', False)]">
+                        <span class="o_stat_text">Project</span>
+                    </button>
+                </xpath>
+
+                <xpath expr="//page[@name='other_information']//field[@name='user_id']" position="after">
+                    <field name="project_csl_id" readonly="1"/>
+                    <field name="project_reference" readonly="1"/>
+                </xpath>
+            </field>
+        </record>
+    </data>
+</odoo>

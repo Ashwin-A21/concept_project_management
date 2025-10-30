@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+
+        <record model="ir.module.category" id="module_category_project_management_csl">
+            <field name="name">Project Management</field>
+            <field name="description">User access levels for Custom Project Management</field>
+            <field name="sequence">20</field>
+        </record>
+
+        <record id="group_project_csl_ceo" model="res.groups">
+            <field name="name">CEO</field>
+            <field name="category_id" ref="module_category_project_management_csl"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="group_project_csl_project_manager" model="res.groups">
+            <field name="name">Project Manager</field>
+            <field name="category_id" ref="module_category_project_management_csl"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        
+        <record id="group_project_csl_purchase_manager" model="res.groups">
+            <field name="name">Purchase Manager</field>
+            <field name="category_id" ref="module_category_project_management_csl"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+        <record id="group_project_csl_hr_manager" model="res.groups">
+            <field name="name">HR Manager</field>
+            <field name="category_id" ref="module_category_project_management_csl"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+        
+        <record id="group_project_csl_account_manager" model="res.groups">
+            <field name="name">Account Manager</field>
+            <field name="category_id" ref="module_category_project_management_csl"/>
+            <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+        </record>
+
+    </data>
+</odoo>

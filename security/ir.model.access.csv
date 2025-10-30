@@ -1,0 +1,14 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_project_csl_administrator,project.csl administrator access,model_project_csl,base.group_system,1,1,1,1
+access_project_csl_ceo,project.csl ceo access,model_project_csl,concept_project_management.group_project_csl_ceo,1,1,1,1
+access_project_csl_project_manager,project.csl project manager access,model_project_csl,concept_project_management.group_project_csl_project_manager,1,1,1,1
+access_project_csl_purchase_manager,project.csl purchase manager access,model_project_csl,concept_project_management.group_project_csl_purchase_manager,1,1,1,1
+access_project_csl_hr_manager,project.csl hr manager access,model_project_csl,concept_project_management.group_project_csl_hr_manager,1,1,1,1
+access_project_csl_account_manager,project.csl account manager access,model_project_csl,concept_project_management.group_project_csl_account_manager,1,1,1,1
+
+access_scope_work_set,scope.work.set all access,model_scope_work_set,base.group_user,1,1,1,1
+access_scope_work_line,scope.work.line all access,model_scope_work_line,base.group_user,1,1,1,1
+access_project_scope_line,project.scope.line all access,model_project_scope_line,base.group_user,1,1,1,1
+access_project_quotation_line,project.quotation.line all access,model_project_quotation_line,base.group_user,1,1,1,1
+access_project_purchase_line,project.purchase.line all access,model_project_purchase_line,base.group_user,1,1,1,1
+access_project_employee_requisition_line,project.employee.requisition.line all access,model_project_employee_requisition_line,base.group_user,1,1,1,1
