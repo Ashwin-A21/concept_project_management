@@ -43,7 +43,7 @@ class ProjectQuotationLine(models.Model):
                 # Link quotation to project
                 line.quotation_id.project_csl_id = line.project_id
                 
-                # NEW: Link existing invoices from this quotation to the project
+                # Link existing invoices from this quotation to the project
                 if line.quotation_id.invoice_ids:
                     line.quotation_id.invoice_ids.write({
                         'project_csl_id': line.project_id.id
@@ -59,14 +59,14 @@ class ProjectQuotationLine(models.Model):
                     # Link quotation to project
                     line.quotation_id.project_csl_id = line.project_id
                     
-                    # NEW: Link existing invoices from this quotation to the project
+                    # Link existing invoices from this quotation to the project
                     if line.quotation_id.invoice_ids:
                         line.quotation_id.invoice_ids.write({
                             'project_csl_id': line.project_id.id
                         })
         return res
 
-# --- NEW MODEL FOR PURCHASE ORDER LINES ---
+# --- MODEL FOR PURCHASE ORDER LINES ---
 
 class ProjectPurchaseLine(models.Model):
     _name = 'project.purchase.line'
@@ -115,7 +115,7 @@ class ProjectPurchaseLine(models.Model):
                 # Link PO to project
                 line.purchase_order_id.project_csl_id = line.project_id
                 
-                # NEW: Link existing vendor bills from this PO to the project
+                # Link existing vendor bills from this PO to the project
                 if line.purchase_order_id.invoice_ids:
                     line.purchase_order_id.invoice_ids.write({
                         'project_csl_id': line.project_id.id
@@ -131,14 +131,14 @@ class ProjectPurchaseLine(models.Model):
                     # Link PO to project
                     line.purchase_order_id.project_csl_id = line.project_id
                     
-                    # NEW: Link existing vendor bills from this PO to the project
+                    # Link existing vendor bills from this PO to the project
                     if line.purchase_order_id.invoice_ids:
                         line.purchase_order_id.invoice_ids.write({
                             'project_csl_id': line.project_id.id
                         })
         return res
 
-# --- NEW MODEL FOR EMPLOYEE PURCHASE REQUISITION LINES ---
+# --- MODEL FOR EMPLOYEE PURCHASE REQUISITION LINES ---
 
 class ProjectEmployeeRequisitionLine(models.Model):
     _name = 'project.employee.requisition.line'
